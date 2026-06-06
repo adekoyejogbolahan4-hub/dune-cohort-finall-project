@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ doctor }} — CarePoint{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="detail-card">
+    <div class="detail-header">
+      {% if doctor.photo %}
+        <img src="{{ doctor.photo.url }}" alt="{{ doctor }}" class="detail-photo" />
+      {% else %}
+        <div class="detail-photo-placeholder"><i class="fa-solid fa-user-doctor"></i></div>
+      {% endif %}
+      <div class="detail-info">
+        <h1>{{ doctor }}</h1>
+        <p class="specialty-badge">{{ doctor.specialisation }}</p>
+        <p><i class="fa-solid fa-briefcase"></i> {{ doctor.years_experience }} years experience</p>
+        <p><i class="fa-solid fa-envelope"></i> {{ doctor.email }}</p>
+        <p><i class="fa-solid fa-phone"></i> {{ doctor.phone }}</p>
+        {% if doctor.is_available %}
+          <span class="badge badge-green">Available</span>
+        {% else %}
+          <span class="badge badge-red">Unavailable</span>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if doctor.bio %}
+    <div class="detail-bio">
+      <h2>About</h2>
+      <p>{{ doctor.bio }}</p>
+    </div>
+    {% endif %}
+
+    <div class="detail-actions">
+      <a href="{% url 'appointment_book' %}" class="btn btn-primary">Book with {{ doctor.first_name }}</a>
+      <a href="{% url 'doctor_list' %}" class="btn btn-outline">Back to Doctors</a>
+      {% if request.user.is_staff %}
+        <a href="{% url 'doctor_update' doctor.pk %}" class="btn btn-warn">Edit</a>
+        <a href="{% url 'doctor_delete' doctor.pk %}" class="btn btn-danger">Delete</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

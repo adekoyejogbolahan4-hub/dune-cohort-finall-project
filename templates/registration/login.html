@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Login — CarePoint{% endblock %}
+
+{% block content %}
+<div class="container form-container auth-form">
+  <div class="auth-card">
+    <div class="auth-header">
+      <i class="fa-solid fa-heart-pulse"></i>
+      <h1>Welcome Back</h1>
+      <p>Sign in to your CarePoint account</p>
+    </div>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% if form.errors %}
+        <div class="form-error-banner">Invalid username or password. Please try again.</div>
+      {% endif %}
+      {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+        </div>
+      {% endfor %}
+      <input type="hidden" name="next" value="{{ next }}">
+      <button type="submit" class="btn btn-primary btn-full">Login</button>
+    </form>
+    <p class="auth-footer">No account? <a href="{% url 'register' %}">Create one free</a></p>
+  </div>
+</div>
+{% endblock %}

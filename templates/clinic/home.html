@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CarePoint — Quality Healthcare in Lagos{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Your Health, <span class="accent">Our Priority</span></h1>
+    <p>Book appointments with Lagos's top specialists. Fast, simple, and reliable.</p>
+    <div class="hero-actions">
+      <a href="{% url 'appointment_book' %}" class="btn btn-primary">Book Appointment</a>
+      <a href="{% url 'doctor_list' %}" class="btn btn-outline">Meet Our Doctors</a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <span class="stat-number">{{ doctor_count }}+</span>
+      <span class="stat-label">Specialists</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number">{{ service_count }}+</span>
+      <span class="stat-label">Services</span>
+    </div>
+    <div class="stat">
+      <span class="stat-number">5★</span>
+      <span class="stat-label">Patient Rating</span>
+    </div>
+  </div>
+</section>
+
+<!-- Services -->
+<section class="section">
+  <div class="section-header">
+    <h2>Our Services</h2>
+    <p>Comprehensive care across all specialties</p>
+  </div>
+  <div class="grid grid-3">
+    {% for service in services %}
+    <div class="card service-card">
+      <div class="service-icon"><i class="fa-solid {{ service.icon }}"></i></div>
+      <h3>{{ service.name }}</h3>
+      <p>{{ service.description|truncatewords:18 }}</p>
+      <p class="price">₦{{ service.price|floatformat:0 }} &middot; {{ service.duration_minutes }} min</p>
+    </div>
+    {% empty %}
+      <p>No services available yet.</p>
+    {% endfor %}
+  </div>
+  <div class="section-cta">
+    <a href="{% url 'service_list' %}" class="btn btn-outline">View All Services</a>
+  </div>
+</section>
+
+<!-- Featured Doctors -->
+<section class="section section-alt">
+  <div class="section-header">
+    <h2>Meet Our Specialists</h2>
+    <p>Experienced, caring, and here for you</p>
+  </div>
+  <div class="grid grid-4">
+    {% for doctor in doctors %}
+    <div class="card doctor-card">
+      {% if doctor.photo %}
+        <img src="{{ doctor.photo.url }}" alt="{{ doctor }}" class="doctor-photo" />
+      {% else %}
+        <div class="doctor-photo-placeholder"><i class="fa-solid fa-user-doctor"></i></div>
+      {% endif %}
+      <h3>{{ doctor }}</h3>
+      <p class="specialty">{{ doctor.specialisation }}</p>
+      <p class="exp">{{ doctor.years_experience }} yrs experience</p>
+      <a href="{% url 'doctor_detail' doctor.pk %}" class="btn btn-sm">View Profile</a>
+    </div>
+    {% empty %}
+      <p>No doctors listed yet.</p>
+    {% endfor %}
+  </div>
+  <div class="section-cta">
+    <a href="{% url 'doctor_list' %}" class="btn btn-outline">All Doctors</a>
+  </div>
+</section>
+
+<!-- CTA Banner -->
+<section class="cta-banner">
+  <h2>Ready to book your appointment?</h2>
+  <p>Join thousands of patients who trust CarePoint for their healthcare needs.</p>
+  {% if request.user.is_authenticated %}
+    <a href="{% url 'appointment_book' %}" class="btn btn-primary btn-lg">Book Now</a>
+  {% else %}
+    <a href="{% url 'register' %}" class="btn btn-primary btn-lg">Get Started</a>
+  {% endif %}
+</section>
+
+{% endblock %}

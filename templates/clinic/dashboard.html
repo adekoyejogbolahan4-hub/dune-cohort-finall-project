@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block title %}My Dashboard — CarePoint{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Welcome back, {{ request.user.first_name }}!</h1>
+  <p>Manage your appointments below</p>
+</div>
+<div class="container">
+  <div class="dashboard-actions">
+    <a href="{% url 'appointment_book' %}" class="btn btn-primary">
+      <i class="fa-solid fa-plus"></i> New Appointment
+    </a>
+  </div>
+
+  <h2>Your Appointments</h2>
+
+  {% if appointments %}
+  <div class="table-wrapper">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Doctor</th>
+          <th>Service</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for appt in appointments %}
+        <tr>
+          <td>{{ appt.doctor }}</td>
+          <td>{{ appt.service }}</td>
+          <td>{{ appt.appointment_date }}</td>
+          <td>{{ appt.appointment_time|time:"g:i A" }}</td>
+          <td>
+            <span class="badge
+              {% if appt.status == 'confirmed' %}badge-green
+              {% elif appt.status == 'pending' %}badge-yellow
+              {% elif appt.status == 'cancelled' %}badge-red
+              {% else %}badge-grey{% endif %}">
+              {{ appt.get_status_display }}
+            </span>
+          </td>
+          <td>
+            <a href="{% url 'appointment_detail' appt.pk %}" class="btn btn-sm">View</a>
+            {% if appt.status == 'pending' %}
+              <a href="{% url 'appointment_update' appt.pk %}" class="btn btn-sm btn-warn">Edit</a>
+              <a href="{% url 'appointment_cancel' appt.pk %}" class="btn btn-sm btn-danger">Cancel</a>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+    <div class="empty-state">
+      <i class="fa-solid fa-calendar-xmark"></i>
+      <p>You have no appointments yet.</p>
+      <a href="{% url 'appointment_book' %}" class="btn btn-primary">Book Your First Appointment</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

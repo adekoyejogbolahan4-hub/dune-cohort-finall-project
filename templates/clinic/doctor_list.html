@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Our Doctors — CarePoint{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Our Specialists</h1>
+  <p>Find the right doctor for your needs</p>
+</div>
+
+<div class="container">
+  <!-- Filter -->
+  <form method="get" class="filter-bar">
+    <label for="specialisation">Filter by specialty:</label>
+    <select name="specialisation" id="specialisation" onchange="this.form.submit()">
+      <option value="">All specialties</option>
+      {% for spec in specialisations %}
+        <option value="{{ spec.pk }}" {% if selected == spec.pk|stringformat:"s" %}selected{% endif %}>
+          {{ spec.name }}
+        </option>
+      {% endfor %}
+    </select>
+    {% if selected %}<a href="{% url 'doctor_list' %}" class="btn btn-sm">Clear</a>{% endif %}
+  </form>
+
+  <div class="grid grid-3">
+    {% for doctor in doctors %}
+    <div class="card doctor-card">
+      {% if doctor.photo %}
+        <img src="{{ doctor.photo.url }}" alt="{{ doctor }}" class="doctor-photo" />
+      {% else %}
+        <div class="doctor-photo-placeholder"><i class="fa-solid fa-user-doctor"></i></div>
+      {% endif %}
+      <h3>{{ doctor }}</h3>
+      <p class="specialty">{{ doctor.specialisation }}</p>
+      <p>{{ doctor.years_experience }} years of experience</p>
+      <p>{{ doctor.bio|truncatewords:15 }}</p>
+      <div class="card-actions">
+        <a href="{% url 'doctor_detail' doctor.pk %}" class="btn btn-sm">View Profile</a>
+        <a href="{% url 'appointment_book' %}" class="btn btn-sm btn-primary">Book</a>
+      </div>
+      {% if request.user.is_staff %}
+      <div class="card-actions staff-actions">
+        <a href="{% url 'doctor_update' doctor.pk %}" class="btn btn-sm btn-warn">Edit</a>
+        <a href="{% url 'doctor_delete' doctor.pk %}" class="btn btn-sm btn-danger">Delete</a>
+      </div>
+      {% endif %}
+    </div>
+    {% empty %}
+      <p>No doctors found for the selected filter.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

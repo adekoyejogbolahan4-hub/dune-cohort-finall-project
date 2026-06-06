@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Register — CarePoint{% endblock %}
+
+{% block content %}
+<div class="container form-container auth-form">
+  <div class="auth-card">
+    <div class="auth-header">
+      <i class="fa-solid fa-heart-pulse"></i>
+      <h1>Create Account</h1>
+      <p>Join CarePoint to book appointments</p>
+    </div>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+        <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            {% for error in field.errors %}
+              <span class="form-error">{{ error }}</span>
+            {% endfor %}
+          {% endif %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+    </form>
+    <p class="auth-footer">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+  </div>
+</div>
+{% endblock %}

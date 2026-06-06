@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Services — CarePoint{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1>Our Services</h1>
+  <p>Comprehensive healthcare offerings</p>
+</div>
+<div class="container">
+  <div class="grid grid-3">
+    {% for service in services %}
+    <div class="card service-card">
+      <div class="service-icon"><i class="fa-solid {{ service.icon }}"></i></div>
+      <h3>{{ service.name }}</h3>
+      <p>{{ service.description }}</p>
+      <div class="service-meta">
+        <span class="price">₦{{ service.price|floatformat:0 }}</span>
+        <span class="duration"><i class="fa-regular fa-clock"></i> {{ service.duration_minutes }} min</span>
+      </div>
+      <a href="{% url 'appointment_book' %}" class="btn btn-primary btn-sm">Book Now</a>
+    </div>
+    {% empty %}
+      <p>No services listed yet.</p>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

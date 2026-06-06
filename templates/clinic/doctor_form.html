@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action }} Doctor — CarePoint{% endblock %}
+
+{% block content %}
+<div class="container form-container">
+  <h1>{{ action }} Doctor</h1>
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          {% for error in field.errors %}
+            <span class="form-error">{{ error }}</span>
+          {% endfor %}
+        {% endif %}
+        {% if field.help_text %}
+          <small class="form-help">{{ field.help_text }}</small>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">{{ action }} Doctor</button>
+      <a href="{% url 'doctor_list' %}" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

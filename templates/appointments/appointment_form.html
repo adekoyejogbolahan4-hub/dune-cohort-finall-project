@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ action }} Appointment — CarePoint{% endblock %}
+
+{% block content %}
+<div class="container form-container">
+  <h1>{{ action }} Appointment</h1>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.errors %}
+          {% for error in field.errors %}
+            <span class="form-error">{{ error }}</span>
+          {% endfor %}
+        {% endif %}
+        {% if field.help_text %}
+          <small class="form-help">{{ field.help_text }}</small>
+        {% endif %}
+      </div>
+    {% endfor %}
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">{{ action }} Appointment</button>
+      <a href="{% url 'dashboard' %}" class="btn btn-outline">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

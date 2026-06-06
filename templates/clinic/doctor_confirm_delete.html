@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Doctor — CarePoint{% endblock %}
+
+{% block content %}
+<div class="container form-container">
+  <div class="confirm-delete">
+    <div class="danger-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <h1>Delete Doctor</h1>
+    <p>Are you sure you want to remove <strong>{{ doctor }}</strong> from the system?</p>
+    <p class="warn-text">This action cannot be undone and will also remove all their associated appointments.</p>
+    <form method="post">
+      {% csrf_token %}
+      <div class="form-actions">
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'doctor_detail' doctor.pk %}" class="btn btn-outline">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

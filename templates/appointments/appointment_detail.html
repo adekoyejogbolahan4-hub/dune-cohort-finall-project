@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Appointment #{{ appointment.pk }} — CarePoint{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="detail-card">
+    <h1>Appointment Details</h1>
+    <div class="detail-grid">
+      <div class="detail-item">
+        <span class="detail-label">Doctor</span>
+        <span class="detail-value">{{ appointment.doctor }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Specialty</span>
+        <span class="detail-value">{{ appointment.doctor.specialisation }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Service</span>
+        <span class="detail-value">{{ appointment.service }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Date</span>
+        <span class="detail-value">{{ appointment.appointment_date }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Time</span>
+        <span class="detail-value">{{ appointment.appointment_time|time:"g:i A" }}</span>
+      </div>
+      <div class="detail-item">
+        <span class="detail-label">Status</span>
+        <span class="badge
+          {% if appointment.status == 'confirmed' %}badge-green
+          {% elif appointment.status == 'pending' %}badge-yellow
+          {% elif appointment.status == 'cancelled' %}badge-red
+          {% else %}badge-grey{% endif %}">
+          {{ appointment.get_status_display }}
+        </span>
+      </div>
+      {% if appointment.notes %}
+      <div class="detail-item full-width">
+        <span class="detail-label">Notes</span>
+        <span class="detail-value">{{ appointment.notes }}</span>
+      </div>
+      {% endif %}
+      <div class="detail-item">
+        <span class="detail-label">Booked on</span>
+        <span class="detail-value">{{ appointment.created_at|date:"d M Y, g:i A" }}</span>
+      </div>
+    </div>
+
+    <div class="detail-actions">
+      {% if appointment.status == 'pending' %}
+        <a href="{% url 'appointment_update' appointment.pk %}" class="btn btn-warn">Edit</a>
+        <a href="{% url 'appointment_cancel' appointment.pk %}" class="btn btn-danger">Cancel</a>
+      {% endif %}
+      <a href="{% url 'dashboard' %}" class="btn btn-outline">Back to Dashboard</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

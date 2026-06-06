@@ -1,0 +1,83 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}CarePoint Clinic{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="{% url 'home' %}" class="nav-brand">
+        <i class="fa-solid fa-heart-pulse"></i> CarePoint
+      </a>
+      <ul class="nav-links">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        <li><a href="{% url 'doctor_list' %}">Doctors</a></li>
+        <li><a href="{% url 'service_list' %}">Services</a></li>
+        {% if request.user.is_authenticated %}
+          <li><a href="{% url 'appointment_book' %}">Book Appointment</a></li>
+          <li><a href="{% url 'dashboard' %}">My Dashboard</a></li>
+          {% if request.user.is_staff %}
+            <li><a href="{% url 'doctor_create' %}" class="btn-nav-staff">+ Add Doctor</a></li>
+          {% endif %}
+          <li><a href="{% url 'logout' %}">Logout ({{ request.user.first_name }})</a></li>
+        {% else %}
+          <li><a href="{% url 'login' %}">Login</a></li>
+          <li><a href="{% url 'register' %}" class="btn-nav-primary">Register</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Flash messages -->
+  {% if messages %}
+  <div class="messages-container">
+    {% for message in messages %}
+      <div class="message message-{{ message.tags }}">
+        <i class="fa-solid fa-circle-check"></i> {{ message }}
+        <button class="msg-close" onclick="this.parentElement.remove()">×</button>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- Page Content -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h3><i class="fa-solid fa-heart-pulse"></i> CarePoint</h3>
+        <p>Quality healthcare, close to home. Book appointments with trusted specialists today.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="{% url 'doctor_list' %}">Our Doctors</a></li>
+          <li><a href="{% url 'service_list' %}">Services</a></li>
+          <li><a href="{% url 'appointment_book' %}">Book Now</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <p><i class="fa-solid fa-phone"></i> +234 800 CARE POINT</p>
+        <p><i class="fa-solid fa-envelope"></i> hello@carepoint.ng</p>
+        <p><i class="fa-solid fa-location-dot"></i> Lagos, Nigeria</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 CarePoint Clinic. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
